@@ -2,10 +2,10 @@
 
 namespace App\Service;
 
-class LightnovelService
+class SeriesService
 {
     public function doSomething(): string
     {
-        return "Hello world!";
+        return "Test Hello world Test!";
     }
 }
