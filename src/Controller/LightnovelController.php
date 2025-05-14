@@ -3,43 +3,70 @@
 namespace App\Controller;
 
 use App\Service\LightnovelService;
-use App\Service\SeriesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 class LightnovelController extends AbstractController
 {
-    #[Route('/lightnovel', name: 'app_lightnovel')]
-    public function LN(LightnovelService $service): Response
+    public function __construct(
+        private readonly LightnovelService $lightnovelService
+    ) {}
+
+    #[Route('api/lightnovels', methods:['GET'])]
+    public function getLightnovels(): JsonResponse
     {
-       return new JsonResponse(
-           [
-               'ln'=> ['text, chapters, books', $service->doSomething()],
-               $service->doSomething(),
-               'Light'=> $service->doSomething()
-           ]
-        );
+       $lightnovels = $this->lightnovelService->getLightnovels();
+
+       return $this->json([
+            'data' => $lightnovels
+       ]);
     }
 
-    #[Route('api/books', methods:['POST'])]
-    public function reading(Request $request): JsonResponse
+    #[Route('api/lightnovels/{lightnovelId}', methods:['GET'])]
+    public function getLightnovel(int $lightnovelId): JsonResponse
     {
-        return new JsonResponse(
-            [
-                'lightnovel'=> ['name','text','numbers',],
-                $request->getPayload()->all(),
-            ]
-        );
+       $lightnovel = $this->lightnovelService->getLightnovel($lightnovelId);
+
+       return $this->json([
+            'data' => $lightnovel
+       ]);
+    }
+
+    #[Route('api/lightnovels', methods:['POST'])]
+    public function createLightnovel(Request $request): JsonResponse
+    {
+        $name = $request->getPayload()->get('name');
+        $price = $request->getPayload()->get('price');
+        $description = $request->getPayload()->get('description');
+
+        $lightnovel = $this->lightnovelService->createLightnovel($name, $price, $description);
+
+        return $this->json([
+            'data' => $lightnovel
+        ]);
+    }
+
+    #[Route('api/lightnovels/{lightnovelId}', methods:['PUT'])]
+    public function updateLightnovel(Request $request, int $lightnovelId): JsonResponse
+    {
+        $name = $request->getPayload()->get('name');
+        $price = $request->getPayload()->get('price');
+        $description = $request->getPayload()->get('description');
+
+        $lightnovel = $this->lightnovelService->updateLightnovel($lightnovelId, $name, $price, $description);
+
+        return $this->json([
+            'data' => $lightnovel
+        ]);
+    }
+
+    #[Route('api/lightnovels/{lightnovelId}', methods:['DELETE'])]
+    public function removeLightnovel(int $lightnovelId): JsonResponse
+    {
+        $this->lightnovelService->removeLightnovel($lightnovelId);
+
+        return $this->json(null);
     }
 }
-
-//#[Route('/lightnovel', name: 'app_lightnovel')]
-//    public function LN(LightnovelService $service): Response
-//    {
-//        return $this->render('lightnovel/index.html.twig', [
-//            'controller_name' => 'LightnovelController',
-//        ]);
-//    }//

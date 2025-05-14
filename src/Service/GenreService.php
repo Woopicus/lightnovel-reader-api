@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-class SeriesService
+class GenreService
 {
     public function doSomething(): string
     {
