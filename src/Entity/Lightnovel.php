@@ -19,6 +19,15 @@ class Lightnovel
     private ?int $price = null;
     #[ORM\Column]
     private ?string $description = null;
+    #[ORM\Column]
+    private ?string $imageFilename = null;
+    #[ORM\Column]
+    private ?string $imageFilelocation = null;
+
+    #[ORM\ManyToMany(targetEntity: Genre::class)]
+    private Collection $genres;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,5 +61,30 @@ class Lightnovel
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): void
+    {
+        $this->imageFilename = $imageFilename;
+    }
+
+    public function getImageFilelocation(): ?string
+    {
+        return $this->imageFilelocation;
+    }
+
+    public function setImageFilelocation(?string $imageFilelocation): void
+    {
+        $this->imageFilelocation = $imageFilelocation;
+    }
+
+    public function getImagefile(): string
+    {
+        return $this->getImageFilelocation() .'\\'. $this->getImageFilename();
     }
 }

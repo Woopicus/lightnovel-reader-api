@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\LightnovelService;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,4 +70,24 @@ class LightnovelController extends AbstractController
 
         return $this->json(null);
     }
+
+    #[Route('api/lightnovels/{lightnovelId}/images', methods:['POST'])]
+    public function imageLightnovel(Request $request, int $lightnovelId): JsonResponse
+    {
+        $file = $request->files->get('image');
+        $this->lightnovelService->imageLightnovel($file, $lightnovelId);
+
+        return $this->json(null);
+    }
+
+    #[Route('api/lightnovels/{lightnovelId}/images', methods:['GET'])]
+    public function getLightnovelimage(int $lightnovelId): BinaryFileResponse
+    {
+        $lightnovel = $this->lightnovelService->getLightnovel($lightnovelId);
+
+        return $this->file($lightnovel->getImagefile(), $lightnovel->getImageFilename());
+    }
 }
+
+//Categorie met de backend te combineren:
+//Categorien beheren.

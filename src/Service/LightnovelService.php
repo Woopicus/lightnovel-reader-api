@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Lightnovel;
 use App\Repository\LightnovelRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 readonly class LightnovelService
 {
@@ -60,5 +61,29 @@ readonly class LightnovelService
             $this->entityManager->remove($lightnovel);
             $this->entityManager->flush();
         }
+    }
+
+    public function imageLightnovel(UploadedFile $file, int $lightnovelId): ?Lightnovel
+    {
+        $lightnovel = $this->getLightnovel($lightnovelId);
+
+        if ($lightnovel) {
+
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileName = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
+            $target = 'E:\Uploads';
+
+            $file->move($target, $fileName);
+
+            $lightnovel->setImageFilename($fileName);
+            $lightnovel->setImageFilelocation($target);
+
+            $this->entityManager->persist($lightnovel);
+            $this->entityManager->flush();
+
+            return $lightnovel;
+        }
+
+        return null;
     }
 }

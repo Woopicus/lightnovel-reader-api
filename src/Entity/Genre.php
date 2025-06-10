@@ -21,6 +21,9 @@ class Genre
     #[ORM\Column]
     private ?string $description = null;
 
+    #[ORM\ManyToMany(targetEntity: Lightnovel::class, mappedBy: "genres")]
+    private Collection $lightnovels;
+
     public function getId(): ?int
     {
         return $this->id;
