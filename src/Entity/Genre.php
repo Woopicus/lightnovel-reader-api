@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-
-use AllowDynamicProperties;
 use App\Repository\GenreRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
-#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: GenreRepository::class)]
+#[ORM\Entity(repositoryClass: GenreRepository::class)]
 class Genre
 {
     #[ORM\Id]
@@ -21,8 +22,13 @@ class Genre
     #[ORM\Column]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: Lightnovel::class, mappedBy: "genres")]
+    #[ORM\ManyToMany(targetEntity: Lightnovel::class, mappedBy: 'genres')]
     private Collection $lightnovels;
+
+    public function __construct()
+    {
+        $this->lightnovels = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -39,6 +45,16 @@ class Genre
         $this->name = $name;
     }
 
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): void
+    {
+        $this->category = $category;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -49,13 +65,21 @@ class Genre
         $this->description = $description;
     }
 
-    public function getCategory(): ?string
+    #[Ignore]
+    public function getLightnovels(): Collection
     {
-        return $this->category;
+        return $this->lightnovels;
     }
 
-    public function setCategory(?string $category): void
+    public function addLightnovel(Lightnovel $lightnovel): void
     {
-        $this->category = $category;
+        if (!$this->lightnovels->contains($lightnovel)) {
+            $this->lightnovels->add($lightnovel);
+        }
+    }
+
+    public function removeLightnovel(Lightnovel $lightnovel): void
+    {
+        $this->lightnovels->removeElement($lightnovel);
     }
 }

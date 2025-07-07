@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Lightnovel;
+use App\Entity\Genre;
 use App\Repository\LightnovelRepository;
+use App\Repository\GenreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -12,6 +14,7 @@ readonly class LightnovelService
     public function __construct(
        private EntityManagerInterface $entityManager,
        private LightnovelRepository $lightnovelRepository,
+       private GenreRepository $genreRepository
     ) {}
 
     public function getLightnovels(): array
@@ -85,5 +88,37 @@ readonly class LightnovelService
         }
 
         return null;
+    }
+
+    public function addGenreToLightnovel(int $lightnovelId, int $genreId): ?Lightnovel
+    {
+        $lightnovel = $this->lightnovelRepository->find($lightnovelId);
+        $genre = $this->genreRepository->find($genreId);
+
+        if (!$lightnovel || !$genre) {
+            return null;
+        }
+
+        $lightnovel->addGenre($genre);
+        $this->entityManager->persist($lightnovel);
+        $this->entityManager->flush();
+
+        return $lightnovel;
+    }
+
+    public function removeGenreFromLightnovel(int $lightnovelId, int $genreId): ?Lightnovel
+    {
+        $lightnovel = $this->lightnovelRepository->find($lightnovelId);
+        $genre = $this->genreRepository->find($genreId);
+
+        if (!$lightnovel || !$genre) {
+            return null;
+        }
+
+        $lightnovel->removeGenre($genre);
+        $this->entityManager->persist($lightnovel);
+        $this->entityManager->flush();
+
+        return $lightnovel;
     }
 }
