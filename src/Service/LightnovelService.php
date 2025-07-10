@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Lightnovel;
-use App\Entity\Genre;
 use App\Repository\LightnovelRepository;
 use App\Repository\GenreRepository;
 use Doctrine\ORM\EntityManagerInterface;

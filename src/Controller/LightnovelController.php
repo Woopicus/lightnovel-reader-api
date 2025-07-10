@@ -105,9 +105,4 @@ class LightnovelController extends AbstractController
 
         return $this->json(['data' => $lightnovel]);
     }
-
-
 }
-
-//Categorie met de backend te combineren:
-//Categorien beheren.

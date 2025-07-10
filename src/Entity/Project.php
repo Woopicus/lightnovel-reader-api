@@ -2,12 +2,8 @@
 
 namespace App\Entity;
 
-
-use AllowDynamicProperties;
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
     #[ORM\Id]
