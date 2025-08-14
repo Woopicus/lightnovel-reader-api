@@ -24,10 +24,10 @@ class Lightnovel
     #[ORM\Column]
     private ?string $description = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $imageFilename = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $imageFilelocation = null;
 
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'lightnovels')]
