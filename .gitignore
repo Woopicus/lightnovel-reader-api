@@ -4,6 +4,7 @@
 /.env.local.php
 /.env.*.local
 .env
+.idea
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
@@ -25,3 +26,7 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
